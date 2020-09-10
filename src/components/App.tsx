@@ -23,7 +23,7 @@ class App extends React.Component<Props, State> {
     constructor(props:any){
         super(props);
         this.state = {
-            radius: 2000,
+            radius: 5000,
             location: {latitude:0, longitude:0}
         }
         this.changeRadius = this.changeRadius.bind(this)
@@ -37,7 +37,7 @@ class App extends React.Component<Props, State> {
                     latitude:position.coords.latitude,
                     longitude:position.coords.longitude
                 }, 
-                radius: 2000
+                radius: 5000
             })
             this.props.getAllRestaurants(this.state.location, this.state.radius)
         });
@@ -69,7 +69,7 @@ class App extends React.Component<Props, State> {
                         </Navbar.Brand>
                         
                         <Form inline>
-                        <FormControl onChange={(event) => this.changeRadius(event)} value={this.state.radius} type="number" placeholder="Distance (2000 m)" className="mr-sm-2" />
+                        <FormControl onChange={(event) => this.changeRadius(event)} value={this.state.radius} type="number" placeholder="Distance (5000 m)" className="mr-sm-2" />
                             <Button variant="outline-info" onClick={() => this.updateRestaurants()}>Search within</Button>
                         </Form>
                     </Navbar>

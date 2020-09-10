@@ -1,12 +1,13 @@
 import React from 'react'
 import styles from './Restaurant.module.css'
-import { Container, Card } from 'react-bootstrap';
-import Rating from 'react-rating';
+import { Container, Card, Carousel } from 'react-bootstrap';
+import { Rating } from '@material-ui/lab';
+import { Box } from '@material-ui/core';
 import { connect } from "react-redux";
 import { getRestaurantDetail } from '../../actions/restaurantActions';
 import apiClient from '../../apiClient';
 import { AxiosResponse } from 'axios';
-
+import { Phone, LocationCity, LocationOn } from '@material-ui/icons';
 
 interface RestaurantProps {
   restaurant: any, 
@@ -19,7 +20,8 @@ interface RestaurantState {
   address: string,
   phone: string, 
   url: string, 
-  photos: []
+  photos: any[], 
+  photoUrl: string
 }
 
 class  RestaurantComponent extends React.Component<RestaurantProps, RestaurantState> {
@@ -30,7 +32,8 @@ class  RestaurantComponent extends React.Component<RestaurantProps, RestaurantSt
       phone: '', 
       restaurant: {}, 
       url: '',
-      photos: []
+      photos: [], 
+      photoUrl: ''
     }
   }
 
@@ -50,20 +53,27 @@ class  RestaurantComponent extends React.Component<RestaurantProps, RestaurantSt
   }
 
   render(){
+  
   return(
     <Container>
-      <Card >
-        <Card.Img>
-
-        </Card.Img>
+      <Card>
         <Card.Body>
-            <Card.Title>{this.props.restaurant.name}</Card.Title>
+            <Card.Title >{this.props.restaurant.name}</Card.Title>
             <Card.Text></Card.Text>
         </Card.Body>
         <Card.Footer >
-          <Rating readonly={true} initialRating={this.props.restaurant.rating}/>
-          <span>{this.state.phone || "no phone"}</span>
-          <span>{this.state.address || "No addres"}</span>
+          <Box>
+            <Rating value={this.props.restaurant.rating} readOnly/>
+          </Box>
+          <Box display="flex"> 
+            <Box><Phone/></Box> <Box></Box><Box>{this.state.phone || "No phone"}</Box>
+          </Box>
+          <Box display="flex">
+            <Box><LocationCity/></Box><Box></Box> <Box>{this.state.address || "No address"}</Box>
+          </Box>
+          <Box display="flex">
+          <Box><LocationOn/></Box><Box></Box><Box><Card.Link href={this.state.url || "No URL"}>Maps</Card.Link></Box>
+          </Box>
         </Card.Footer>
       </Card>
       
