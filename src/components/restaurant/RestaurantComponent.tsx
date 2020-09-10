@@ -65,9 +65,9 @@ class  RestaurantComponent extends React.Component<RestaurantProps, RestaurantSt
   }
 
   render(){
-    let phoneComponent = this.state.phone ? (<Box>{this.state.phone}</Box>) : (<Box><ReactLoading type="bubbles"/></Box>)
-    let addressComponent = this.state.url && this.state.address ? (<Box><Card.Link href={this.state.url}>{this.state.address}</Card.Link></Box>):(<Box><ReactLoading type="bubbles"/></Box>)
-    let urlComponent = this.state.website ? (<Box><Card.Link href={this.state.website}>{this.getRootURL(this.state.website)}</Card.Link></Box>):(<Box><ReactLoading type="bubbles"/></Box>)
+    let phoneComponent = this.state.phone ? (<Box>{this.state.phone}</Box>) : (<ReactLoading color="#255F63"  type="bubbles"/>)
+    let addressComponent = this.state.url && this.state.address ? (<Box><Card.Link href={this.state.url}>{this.state.address}</Card.Link></Box>):(<ReactLoading color="#255F63" type="bubbles"/>)
+    let urlComponent = this.state.website ? (<Box><Card.Link href={this.state.website}>{this.getRootURL(this.state.website)}</Card.Link></Box>):(<ReactLoading color="#255F63" type="bubbles"/>)
 
 
   return(

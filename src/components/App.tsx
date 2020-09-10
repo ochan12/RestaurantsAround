@@ -83,9 +83,8 @@ class App extends React.Component<Props, State> {
                         <Navbar.Collapse className="justify-content-end">
                             <Form inline>
                             <FormControl onChange={(event) => this.changeRadius(event)} value={this.state.radius} type="number" placeholder="Distance (5 km)" className="mr-sm-2" />
-                            <Navbar.Text>km</Navbar.Text>
-                            <Navbar.Toggle/>
-                            <Button variant="outline-info" onClick={() => this.updateRestaurants()}>Search within</Button>
+                            <Navbar.Text >km</Navbar.Text>
+                            <Button style={{marginLeft: '8xp'}} variant="outline-info" onClick={() => this.updateRestaurants()}>Search within</Button>
                             </Form>
                         </Navbar.Collapse>
                     </Navbar>
