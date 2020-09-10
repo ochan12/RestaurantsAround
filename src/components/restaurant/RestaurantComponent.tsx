@@ -4,43 +4,72 @@ import { Container, Card } from 'react-bootstrap';
 import Rating from 'react-rating';
 import { connect } from "react-redux";
 import { getRestaurantDetail } from '../../actions/restaurantActions';
+import apiClient from '../../apiClient';
+import { AxiosResponse } from 'axios';
+
 
 interface RestaurantProps {
   restaurant: any, 
-  getDetail: any, 
+  getDetail: any,
+
 }
 
 interface RestaurantState {
-  restaurant: any
+  restaurant: any, 
+  address: string,
+  phone: string, 
+  url: string, 
+  photos: []
 }
 
-const  RestaurantComponent =  (props:any) => (
+class  RestaurantComponent extends React.Component<RestaurantProps, RestaurantState> {
+  constructor(props: any){
+    super(props);
+    this.state = {
+      address: '', 
+      phone: '', 
+      restaurant: {}, 
+      url: '',
+      photos: []
+    }
+  }
+
+
+  componentDidMount = async () => {
+    await apiClient.getRestaurantDetail(this.props.restaurant.place_id).then(
+      (res: AxiosResponse ) => {
+        console.log(res.data)
+        this.setState({
+          address: res.data.result.formatted_address, 
+          phone: res.data.result.formatted_phone_number, 
+          url: res.data.result.url, 
+          photos: res.data.result.photos
+        })
+        
+      })
+  }
+
+  render(){
+  return(
     <Container>
       <Card >
         <Card.Img>
 
         </Card.Img>
         <Card.Body>
-            <Card.Title>{props.restaurant.name}</Card.Title>
+            <Card.Title>{this.props.restaurant.name}</Card.Title>
             <Card.Text></Card.Text>
         </Card.Body>
         <Card.Footer >
-          <Rating readonly={true} initialRating={props.restaurant.rating}/>
+          <Rating readonly={true} initialRating={this.props.restaurant.rating}/>
+          <span>{this.state.phone || "no phone"}</span>
+          <span>{this.state.address || "No addres"}</span>
         </Card.Footer>
-        <div >
-        <div className="telephone">
-            <span>{props.restaurant.formatted_phone || "No phone"}</span>
-        </div>
-      </div>
-      <div >
-        <div className="address">
-            <span>{props.restaurant.formatted_addres || "No address"}</span>
-        </div>
-      </div>
       </Card>
       
     </Container>
-    )
+  )}
+}
 
 const mapStateToProps = (state: any) => (
 {

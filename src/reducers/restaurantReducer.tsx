@@ -1,11 +1,14 @@
 
-export default (state: any, action:{restaurantDetail: any, type:string}) => {
-  console.log(action)
+export default (state: any, action:{restaurant: any, type:string}) => {
     switch (action.type) {
       case 'GET_DETAIL_SUCCESS':
-        state.restaurantsArray.forEach((element:any, index:number) => {
-          if(element.place_id == action.restaurantDetail.place_id){
-            Object.assign(state.restaurantsArray[index], action.restaurantDetail);
+        console.log("Get detail success")
+        console.log(state)
+        state.restaurantsArray.map((element:any, index:number) => {
+          console.log(element.place_id+" - "+action.restaurant.place_id)
+          if(element.place_id == action.restaurant.place_id){
+            console.log("Is the same!")
+            Object.assign(state.restaurantsArray[index], action.restaurant);
             return state;
           }
         })

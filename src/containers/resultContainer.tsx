@@ -9,7 +9,6 @@ const ResultContainer = (props: any) => (
       <CardColumns>
       {props.restaurantsArray.length > 0 && props.restaurantsArray.map(
         (element: {place_id: string}) => {
-          console.log(element)
         return (<RestaurantComponent restaurant={element} key={element.place_id}/>)
       }
         
