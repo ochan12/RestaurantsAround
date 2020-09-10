@@ -7,7 +7,8 @@ import { connect } from "react-redux";
 import { getRestaurantDetail } from '../../actions/restaurantActions';
 import apiClient from '../../apiClient';
 import { AxiosResponse } from 'axios';
-import { Phone, LocationCity, LocationOn } from '@material-ui/icons';
+import { Phone, Language, LocationOn } from '@material-ui/icons';
+import ReactLoading from 'react-loading';
 
 interface RestaurantProps {
   restaurant: any, 
@@ -21,7 +22,9 @@ interface RestaurantState {
   phone: string, 
   url: string, 
   photos: any[], 
-  photoUrl: string
+  photoUrl: string, 
+  website: string, 
+  reviews: []
 }
 
 class  RestaurantComponent extends React.Component<RestaurantProps, RestaurantState> {
@@ -33,7 +36,9 @@ class  RestaurantComponent extends React.Component<RestaurantProps, RestaurantSt
       restaurant: {}, 
       url: '',
       photos: [], 
-      photoUrl: ''
+      photoUrl: '',
+      website: '', 
+      reviews: []
     }
   }
 
@@ -46,33 +51,41 @@ class  RestaurantComponent extends React.Component<RestaurantProps, RestaurantSt
           address: res.data.result.formatted_address, 
           phone: res.data.result.formatted_phone_number, 
           url: res.data.result.url, 
-          photos: res.data.result.photos
+          photos: res.data.result.photos, 
+          website: res.data.result.website || '', 
+          reviews: res.data.result.reviews || []
         })
         
       })
   }
 
   render(){
-  
+    let phoneComponent = this.state.phone ? (<Box>{this.state.phone}</Box>) : (<Box><ReactLoading type="bubbles"/></Box>)
+    let addressComponent = this.state.url && this.state.address ? (<Box><Card.Link href={this.state.url}>{this.state.address}</Card.Link></Box>):(<Box><ReactLoading type="bubbles"/></Box>)
+    let urlComponent = this.state.website ? (<Box><Card.Link href={this.state.website}>{this.state.website}</Card.Link></Box>):(<Box><ReactLoading type="bubbles"/></Box>)
+
+
   return(
     <Container>
       <Card>
         <Card.Body>
             <Card.Title >{this.props.restaurant.name}</Card.Title>
-            <Card.Text></Card.Text>
+            <Card.Text>
+            <Box>
+              <Rating value={this.props.restaurant.rating} readOnly/>
+            </Box>
+            </Card.Text>
         </Card.Body>
         <Card.Footer >
-          <Box>
-            <Rating value={this.props.restaurant.rating} readOnly/>
-          </Box>
+         
           <Box display="flex"> 
-            <Box><Phone/></Box> <Box></Box><Box>{this.state.phone || "No phone"}</Box>
+            <Box><Phone/></Box> <Box></Box> <Box>{phoneComponent}</Box>
           </Box>
           <Box display="flex">
-            <Box><LocationCity/></Box><Box></Box> <Box>{this.state.address || "No address"}</Box>
+            <Box><LocationOn/></Box><Box></Box> <Box>{addressComponent}</Box>
           </Box>
           <Box display="flex">
-          <Box><LocationOn/></Box><Box></Box><Box><Card.Link href={this.state.url || "No URL"}>Maps</Card.Link></Box>
+          <Box><Language/></Box><Box></Box><Box>{urlComponent}</Box>
           </Box>
         </Card.Footer>
       </Card>

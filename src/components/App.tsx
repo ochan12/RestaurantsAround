@@ -3,7 +3,8 @@ import { connect, useDispatch } from "react-redux";
 import { Route, BrowserRouter as Router, Link } from "react-router-dom";
 import ResultContainer from "../containers/resultContainer";
 import { getRestaurants, getRestaurantSuccess, getRestaurantsFailure } from "../actions/resultsActions";
-import { Navbar, Form, FormControl, Button } from 'react-bootstrap';
+import { Navbar, Form, FormControl, Button, Image } from 'react-bootstrap';
+import { Box } from '@material-ui/core';
 
 
 interface Props {
@@ -15,7 +16,8 @@ interface State {
         latitude: number, 
         longitude: number
     }, 
-    radius: number
+    radius: number, 
+    numberOfResults: number
 }
 
 class App extends React.Component<Props, State> {
@@ -23,8 +25,9 @@ class App extends React.Component<Props, State> {
     constructor(props:any){
         super(props);
         this.state = {
-            radius: 5000,
-            location: {latitude:0, longitude:0}
+            radius: 5,
+            location: {latitude:0, longitude:0}, 
+            numberOfResults: 10
         }
         this.changeRadius = this.changeRadius.bind(this)
         this.updateRestaurants = this.updateRestaurants.bind(this)
@@ -37,9 +40,10 @@ class App extends React.Component<Props, State> {
                     latitude:position.coords.latitude,
                     longitude:position.coords.longitude
                 }, 
-                radius: 5000
+                radius: 5
             })
-            this.props.getAllRestaurants(this.state.location, this.state.radius)
+            
+            this.props.getAllRestaurants(this.state.location, this.state.radius*1000)
         });
         
         
@@ -52,34 +56,59 @@ class App extends React.Component<Props, State> {
         })
     }
 
+    changeNumberOfResults = (results: number) => {
+        this.setState({
+            numberOfResults: results
+        })
+    }
+
     updateRestaurants = () => {
-        console.log(this.state)
-        this.props.getAllRestaurants(this.state.location, this.state.radius)
+        this.props.getAllRestaurants(this.state.location, this.state.radius*1000)
     }
 
     render(){
         return (
         <Router>
-            <div id='app'>
+            <div id='app' >
+                <div style={{backgroundColor: "blanchedalmond", height: '100%'}}>
                 <Route exact path='/' render={()=> (
-                    <div>
-                    <Navbar>
-                        <Navbar.Brand>
-                            Restaurants near you
-                        </Navbar.Brand>
-                        
-                        <Form inline>
-                        <FormControl onChange={(event) => this.changeRadius(event)} value={this.state.radius} type="number" placeholder="Distance (5000 m)" className="mr-sm-2" />
+                    <div style={{backgroundColor: "blanchedalmond", height: '100%'}} >
+                    <Navbar >
+                            <Image src='/logo128.png' height={"40px"} />
+                            <Navbar.Brand>
+                                Restaurants near you
+                            </Navbar.Brand>
+
+                            <Navbar.Toggle />
+                        <Navbar.Collapse className="justify-content-end">
+                            <Form inline>
+                            <FormControl onChange={(event) => this.changeRadius(event)} value={this.state.radius} type="number" placeholder="Distance (5 km)" className="mr-sm-2" />
+                            <Navbar.Text>km</Navbar.Text>
+                            <Navbar.Toggle/>
                             <Button variant="outline-info" onClick={() => this.updateRestaurants()}>Search within</Button>
-                        </Form>
+                            </Form>
+                        </Navbar.Collapse>
                     </Navbar>
-                    <ResultContainer/>
+                    <ResultContainer numberOfResults={this.state.numberOfResults} />
+
+                <div>
+                <footer>
+                    <span>Results</span>
+                    <br/>
+                    <Box>
+                        <Button variant="light" onClick={() => this.changeNumberOfResults(10)}>10</Button>
+                        <Button variant="light" onClick={() => this.changeNumberOfResults(15)}>15</Button>
+                        <Button variant="light" onClick={() => this.changeNumberOfResults(20)}>20</Button>
+                    </Box>
+                    
+                </footer>
+                </div>
                 </div>
                 )}>
 
                 </Route>
+                    </div>
             </div>
-
         </Router>)
     }
 }
